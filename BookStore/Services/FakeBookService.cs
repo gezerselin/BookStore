@@ -8,7 +8,32 @@ namespace BookStore.Services
 {
     public class FakeBookService : IBookService
     {
+        public void AddBook(Book book)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void addComment(Comment comment)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DeleteBook(Book deletingBook)
+        {
+            throw new NotImplementedException();
+        }
+
+        public int EditBook(Book book)
+        {
+            throw new NotImplementedException();
+        }
+
         public List<Book> GetBookByGenreId(int genreId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Book GetBookById(int id)
         {
             throw new NotImplementedException();
         }

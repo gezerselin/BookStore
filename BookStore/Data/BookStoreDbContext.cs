@@ -21,7 +21,12 @@ namespace BookStore.Data
         public DbSet<Book> Books { get; set; }
         public DbSet<Genre> Genres { get; set; }
         public DbSet<Publisher> Publishers { get; set; }
-
+        public DbSet<Role> Roles { get; set; }
+        public DbSet<Gender> Genders { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<Comment> Comments { get; set; }
+        public DbSet<Address> Addresses { get; set; }
+        public DbSet<CreditCart> CreditCarts { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Author>()
@@ -34,24 +39,40 @@ namespace BookStore.Data
                 .WithOne(x => x.Publisher)
                 .HasForeignKey(x => x.PublisherId);
 
-            modelBuilder.Entity<BookGenre>()
-                .HasKey(x => new { x.BookId, x.GenreId });
-
-            modelBuilder.Entity<BookGenre>()
-                 .HasOne(x => x.Book)
-                 .WithMany(x => x.Genres)
-                 .HasForeignKey(x => x.BookId);
-
-            modelBuilder.Entity<BookGenre>()
-                .HasOne(x => x.Genre)
-                .WithMany(x => x.Books)
+            modelBuilder.Entity<Genre>()
+                .HasMany(x => x.Books)
+                .WithOne(x => x.Genre)
                 .HasForeignKey(x => x.GenreId);
 
 
+            modelBuilder.Entity<Role>()
+                .HasMany(x => x.Users)
+                .WithOne(x => x.Role)
+                .HasForeignKey(x => x.RoleId);
 
+            modelBuilder.Entity<Gender>()
+                .HasMany(x => x.Users)
+                .WithOne(x => x.Gender)
+                .HasForeignKey(x => x.GenderId);
 
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.CreditCarts)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<User>()
+                .HasMany(x => x.Addresses)
+                .WithOne(x => x.User)
+                .HasForeignKey(x => x.UserId);
+
+            modelBuilder.Entity<Book>()
+                .HasMany(x => x.Comments)
+                .WithOne(x => x.Book)
+                .HasForeignKey(x => x.BookId);
             base.OnModelCreating(modelBuilder);
         }
+
+        public DbSet<BookStore.Models.User> User { get; set; }
 
        
 

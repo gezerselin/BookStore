@@ -1,0 +1,113 @@
+﻿@model BookStore.Models.Book
+
+@{
+    Layout = "_Layout1";
+    ;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+<h4>Kitap Bilgileri Düzenleme</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount" class="control-label"></label>
+                <input asp-for="Discount" class="form-control" />
+                <span asp-validation-for="Discount" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Info" class="control-label"></label>
+                <input asp-for="Info" class="form-control" />
+                <span asp-validation-for="Info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input asp-for="ImageUrl" class="form-control" />
+                <span asp-validation-for="ImageUrl" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AuthorId" class="control-label"></label>
+                <select asp-for="AuthorId" class="form-control" asp-items="@(IEnumerable<SelectListItem>)ViewBag.Author"></select>
+                <span asp-validation-for="AuthorId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PublisherId" class="control-label"></label>
+                <select asp-for="PublisherId" class="form-control" asp-items="@(IEnumerable<SelectListItem>)ViewBag.Publisher"></select>
+                <span asp-validation-for="PublisherId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="GenreId" class="control-label"></label>
+                <select asp-for="GenreId" class="form-control" asp-items="@(IEnumerable<SelectListItem>)ViewBag.Genre"></select>
+                <span asp-validation-for="GenreId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="button" id="buttonEdit" value="Güncelle" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Kitaplar sayfasına geri dön</a>
+</div>
+
+</body>
+</html>
+
+@section Scripts{ 
+    <script>
+        $(document).ready(function () {
+            $('#buttonEdit').on('click', function () {
+                var sendingData = {
+                    Id: $('#Id').val(),
+                    Name: $('#Name').val(),
+                    Price: $('#Price').val(),
+                    Discount: $('#Discount').val(),
+                    Info: $('#Info').val(),
+                    ImageUrl: $('#ImageUrl').val(),
+                    AuthorId: $('#AuthorId').val(),
+                    PublisherId: $('#PublisherId').val(),
+                    GenreId: $('#GenreId').val()
+
+                }
+                $.ajax({
+                    url: '/Books/Edit',
+                    type: 'POST',
+                    data: sendingData,
+                    success: function (data) {
+                        console.log('başarılı')
+                        alertify.alert(data, function () {
+                            location='/Books/Index'
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+
+                    }
+                });
+            });
+            
+        })
+    </script>
+}

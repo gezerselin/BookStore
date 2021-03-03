@@ -7,5 +7,10 @@ namespace BookStore.Services
     {
         List<Book> GetBooks();
         List<Book> GetBookByGenreId(int genreId);
+        void AddBook(Book book);
+        Book GetBookById(int id);
+        int EditBook(Book book);
+        void DeleteBook(Book deletingBook);
+        void addComment(Comment comment);
     }
 }

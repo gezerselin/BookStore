@@ -8,6 +8,7 @@ namespace BookStore.Services
 {
     public interface IGenreService
     {
-        IList<Genre> GetGenres(); 
+        IList<Genre> GetGenres();
+        int EditGenre(Genre genre);
     }
 }

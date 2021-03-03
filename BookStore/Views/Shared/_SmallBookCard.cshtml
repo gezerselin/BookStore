@@ -1,0 +1,31 @@
+﻿@model Book
+@{
+    var request = ViewContext.HttpContext.Request;
+    string returnUrlValue = request.QueryString.HasValue ? $"{request.Path}{request.QueryString}" : request.Path.ToString();
+
+    decimal price = Math.Round((Model.Price * (1 - (decimal)Model.Discount)), 2);
+}
+
+
+<div class="card mb-3" style="max-width: 540px;">
+    <div class="row g-0">
+        <div class="col-md-4">
+            <a asp-action="DetailsOfBook" asp-controller="Books" asp-route-id="@Model.Id"><img src="@Model.ImageUrl" class="card-img-top" alt="...."></a>
+        </div>
+        <div class="col-md-8">
+            <h3>
+                <a asp-action="DetailsOfBook" asp-controller="Books" asp-route-id="@Model.Id" class="card-title" style="color:peru">@Model.Name</a>
+            </h3>
+            <p style="color:dimgray" class="card-text">@Model.Price TL yerine</p>
+            <p>  <img src="~/discount (1).png" /> @(Model.Discount*100) <img src="~/down-arrow.png" />  </p>
+
+            <h5 style=" font-family:'Times New Roman', Times, serif"> @price TL</h5>
+            <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.Id" method="post">
+
+                <button type="submit" class="btn btn-primary">Sepete Ekle</button>
+                <span class="cart-item"></span>
+
+            </form>
+        </div>
+    </div>
+</div>

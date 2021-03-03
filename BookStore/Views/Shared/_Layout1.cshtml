@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - BookStore</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link href="~/lib/alertify/css/alertify.min.css" rel="stylesheet" />
+    <link href="~/lib/alertify/css/themes/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+
+                    <img style="width:70%; height:70%" src="~/logoson7.png" />
+                </a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse">
+                    <ul class="nav navbar-nav ml-auto ">
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Cart" asp-action="Index">
+
+                                <img src="~/book.png" alt="Sepetim" /> Sepetim
+                            </a>
+                        </li>
+
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <button class="btn  dropdown-toggle" type="button" data-toggle="dropdown">
+
+                                    <img src="~/user.png" /> Profilim
+
+                                </button>
+
+                                <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+
+                                    @{
+                                        int UserId = Convert.ToInt32(User.Identity.Name);
+                                    }
+
+                                    <li><a class="dropdown-item" asp-action="Edit" asp-controller="Users" asp-route-id="@UserId">Kullanıcı Bilgilerim</a></li>
+
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Account" asp-action="LogOut">Çıkış Yap</a></li>
+                                </ul>
+
+                            </li>
+                        }
+                        else
+                        {
+                            <a class="nav-link text-dark btn" asp-area="" asp-controller="Account" asp-action="Login">Giriş Yap</a>
+                        }
+                    </ul>
+                    <ul class="nav navbar-nav mx-auto">
+
+                        <li class="nav-item">
+                            <form method="post" asp-action="Search" asp-controller="Home" class="d-flex">
+                                <input class="form-control me-2" name="searchItem" type="search" placeholder="Search" aria-label="Search">
+                                <button class="btn " type="submit"><img src="~/book (1).png" /></button>
+                            </form>
+                        </li>
+
+                    </ul>
+
+
+                </div>
+            </div>
+        </nav>
+        @if (User.Identity.IsAuthenticated && (User.IsInRole("Admin")))
+        {
+            <div class="container">
+                <main role="main" class="pb-3">
+                    <div class="row" style="border:double">
+                        <div class="col-2"></div>
+                        <div class="col-2">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Books" asp-action="Index">Kitaplar    </a>
+                        </div>
+                        <div class="col-2">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Genres" asp-action="Index">Kitap Türleri    </a>
+                        </div>
+                        <div class="col-2">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Authors" asp-action="Index">Yazarlar    </a>
+                        </div>
+                        <div class="col-2">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Publishers" asp-action="Index">Yayınevleri    </a>
+                        </div>
+                        <div class="col-2"></div>
+
+                    </div>
+                </main>
+            </div>
+
+        }
+        else
+        {
+            //eklemek istediğim şeyler>>
+        }
+    </header>
+    <div class="container">
+        <main role="main" class="pb-3">
+
+            @RenderBody()
+
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            &copy; 2021 - BookStore - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+        </div>
+    </footer>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/alertify/alertify.min.js"></script>
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

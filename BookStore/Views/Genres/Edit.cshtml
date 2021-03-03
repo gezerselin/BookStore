@@ -1,0 +1,70 @@
+﻿@model BookStore.Models.Genre
+
+@{
+    Layout = "_Layout1";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Edit</title>
+</head>
+<body>
+
+    <h4>Kitap Türü Düzenleme</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Edit">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input type="hidden" asp-for="Id" />
+                <div class="form-group">
+                    <label asp-for="Name" class="control-label"></label>
+                    <input asp-for="Name" class="form-control" />
+                    <span asp-validation-for="Name" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="button" id="buttonEditGenre" value="Güncelle" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="Index">Kitap türü sayfasına geri dön</a>
+    </div>
+
+</body>
+</html>
+@section Scripts{
+    <script>
+        $(document).ready(function () {
+            $('#buttonEditGenre').on('click', function () {
+                var sendingData = {
+                    Id: $('#Id').val(),
+                    Name: $('#Name').val()
+
+                }
+                $.ajax({
+                    url: '/Genres/Edit',
+                    type: 'POST',
+                    data: sendingData,
+                    success: function (data) {
+                        console.log('başarılı')
+                        alertify.alert(data, function () {
+                            location = '/Genres/Index'
+                        });
+                    }, 
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+
+
+                })
+            });
+
+        })
+    </script>
+}

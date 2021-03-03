@@ -16,6 +16,13 @@ namespace BookStore.Services
         {
             this.dbContext = dbContext;
         }
+
+        public int EditGenre(Genre genre)
+        {
+            dbContext.Entry(genre).State = EntityState.Modified;
+            return dbContext.SaveChanges();
+        }
+
         public IList<Genre> GetGenres()
         {
             return dbContext.Genres.AsNoTracking().ToList();

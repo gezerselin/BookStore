@@ -1,0 +1,126 @@
+﻿@model Cart
+@{
+    Layout = "_Layout";
+    <!--ViewData["Title"] = "Index";-->
+    int count = 0;
+}
+
+<h1>Sepetim</h1>
+<hr />
+<table class="table table-striped table-hover">
+    <thead>
+        @if (Model != null && Model.Books.Count() != 0)
+        {
+            <tr>
+                <th>Kitap Adı</th>
+                <th>Kitap Fiyatı</th>
+                <th>Adet</th>
+                <th>Ara Toplam</th>
+                <th></th>
+
+            </tr>
+        }
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Books.Count() != 0)
+        {
+
+            @foreach (var item in Model.Books)
+            {
+
+                <tr>
+
+                    <td>@item.Book.Name</td>
+                    <td>@Math.Round((item.Book.Price * (decimal)(1 - item.Book.Discount)), 2) TL</td>
+                    <td>@item.Quantity</td>
+                    <td>@Math.Round((item.Book.Price * (decimal)(1 - item.Book.Discount) * item.Quantity), 2) TL</td>
+                    <td>
+
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <form asp-action="StepRemoveFromCart" asp-controller="Cart" asp-route-id="@item.Book.Id">
+                                <button style="color:black" class="btn btn-outline-primary">-</button>
+                            </form>
+
+                            <button style="color:black" type="button" class="btn btn-outline-primary">@item.Quantity</button>
+                            <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@item.Book.Id">
+                                <button style="color:black" class="btn btn-outline-primary">+</button>
+                            </form>
+
+                        </div>
+
+                    </td>
+                    <td>
+
+                        <form asp-action="RemoveFromCart" asp-controller="Cart" asp-route-id="@item.Book.Id">
+
+                            <button class="btn"><img src="~/trash.png" /></button>
+                        </form>
+                    </td>
+                </tr>
+            }
+
+        }
+
+        else
+        {
+            <h3 style="padding:50px">  <img src="~/sad-rounded-square-emoticon.png" /> Üzgünüz sepetinize henüz ürün eklemediniz! </h3>
+
+        }
+    </tbody>
+    <tfoot>
+
+
+        @if (Model != null && Model.Books.Count() != 0)
+        {
+            <tr>
+                <td colspan="3">Toplam Fiyat</td>
+                <td>@(Math.Round(Model.GetTotalValue(),2)) TL</td>
+
+                <td></td>
+            </tr>
+        }
+
+    </tfoot>
+</table>
+
+
+@if (Model != null && Model.Books.Count() != 0)
+{
+
+    <a class=" btn btn-lg btn-success" asp-action="Index" asp-controller="Home">Alışverişe Devam Et</a>
+    <a class=" btn btn-lg btn-danger" asp-action="PaymentDetail" asp-controller="Cart">Alışverişi Tamamla</a>
+}
+else
+{
+    <a class=" btn btn-lg btn-success" asp-controller="Home" asp-action="Index">Alışverişe Başla</a>
+}
+@if (Model != null && Model.DeletedBooks.Count()!=0)
+{
+    <div class="row">
+        <h2 style="margin-top:20px">Yakın zamanda sildikleriniz</h2>
+    </div>
+}
+<div class="row">
+    @if (Model != null)
+    {
+
+        foreach (var item in Model.DeletedBooks)
+        {
+            @if (count != 0 && count % 2 == 0)
+            {
+            @:</div>
+            @:<div class="row">
+            }
+            <div class="col-6">
+
+                <partial name="_SmallBookCard" model="@item" />
+
+
+
+
+            </div>count++;
+
+        }
+    }
+</div>
+

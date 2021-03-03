@@ -1,0 +1,117 @@
+﻿@model BookStore.Models.Book
+
+@{
+    Layout = "_Layout1";
+    var request = ViewContext.HttpContext.Request;
+    string returnUrlValue = request.QueryString.HasValue ? $"{request.Path}{request.QueryString}" : request.Path.ToString();
+    decimal price = Math.Round((Model.Price * (1 - (decimal)Model.Discount)), 2);
+
+    Comment comment = new Comment();
+
+
+}
+
+<div class="row">
+    <div class="col-2">
+        <img src="@Model.ImageUrl" />
+        <h5>Türü: @Model.Genre.Name</h5>
+    </div>
+    <div class="col-2"></div>
+    <div class="col-6">
+        <div>
+            <h2>@Model.Name</h2>
+        </div>
+
+        <a asp-action="DetailsOfAuthor" asp-controller="Authors" asp-route-id="@Model.AuthorId" style="color:darkred"> @Model.Author.Name @Model.Author.LastName</a>
+        <div>
+            @Model.Publisher.Name
+        </div>
+        <h4>Kitap Açıklaması</h4>
+        <div>
+            @Model.Info
+        </div>
+    </div>
+
+    <div class="col-2">
+        <h6 style="color:dimgray" class="card-text">@Model.Price TL yerine</h6>
+        <p>  <img src="~/discount (1).png" /> @(Model.Discount*100) <img src="~/down-arrow.png" />  </p>
+        <h5 style=" font-family:'Times New Roman', Times, serif"> @price TL</h5>
+        <form asp-action="AddToCart" asp-controller="Cart" asp-route-id="@Model.Id" method="post">
+            <input type="hidden" name="returnUrl" value="@returnUrlValue" />
+            <button id="buttonAddToCard" class="btn btn-primary">
+                Sepete ekle
+                <span class="cart-item"></span>
+            </button>
+        </form>
+    </div>
+
+
+</div>
+
+
+<div class="row"></div>
+
+<form method="post" asp-action="AddComment" asp-controller="Books" asp-route-id="@Model.Id">
+    <div class="row">
+        <div class="col-4"></div>
+        <div style="padding-top:20px" class="col-6">
+            <label for="CommentTitleOfBook">Yorum Başlığı</label>
+        </div>
+        <div class="col-2"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6">
+            <input class="form-control" type="text" name="CommentTitleOfBook" id="CommentTitleOfBook" placeholder="Yorum başlığı girin :)" />
+        </div>
+        <div class="col-2"></div>
+    </div>
+
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6">
+            <label for="CommentOfBook">Yorumunuz</label>
+        </div>
+        <div class="col-2"></div>
+
+    </div>
+    <div class="row">
+        <div class="col-4"></div>
+        <div class="col-6">
+            <input class="form-control" type="text" name="CommentOfBook" id="CommentOfBook" placeholder="Yorumunuzu bizlerle paylaşım :)" />
+        </div>
+        <div class="col-2"></div>
+
+    </div>
+
+    <div class="row">
+        <div class="col-8"></div>
+        <div style="padding:15px" class="col-3">
+            <input type="submit" value="Yorum Ekle" class="btn btn-primary" />
+        </div>
+        <div class="col-1"></div>
+    </div>
+</form>
+
+<div class="row" style="margin-top:30px">
+    <div class=col-4></div>
+    <div class=col-4>
+        <h3 style="">Kitap Yorumları</h3>
+    </div>
+    <div class=col-4></div>
+
+</div>
+
+
+
+@foreach (var item in Model.Comments)
+{
+    <div class="card" style="padding:10px" >
+        <div class="card-body">
+            <h5 class="card-title">@item.CommentTitle</h5>
+            <p class="card-text">@item.CommentOfBook</p>
+
+        </div>
+    </div>
+ }

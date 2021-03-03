@@ -1,0 +1,50 @@
+﻿@model BookStore.Models.Address
+
+@{
+    Layout = "_Layout";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Create</title>
+</head>
+<body>
+
+<h4>Adres Ekleme</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="AddressTitle" class="control-label"></label>
+                <input asp-for="AddressTitle" class="form-control" />
+                <span asp-validation-for="AddressTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AddressDetails" class="control-label"></label>
+                <input asp-for="AddressDetails" class="form-control" />
+                <span asp-validation-for="AddressDetails" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                @{ 
+                    int id = Convert.ToInt32(User.Identity.Name);
+                }
+                <input type="hidden" name="UserId" id="UserId" asp-for="@id" />
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Ekle" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <<a asp-action="PaymentDetail" asp-controller="Cart">Ödeme Detaylarına Dön</a>
+</div>
+
+</body>
+</html>

@@ -8,6 +8,11 @@ namespace BookStore.Services
 {
     public class FakeGenreService : IGenreService
     {
+        public int EditGenre(Genre genre)
+        {
+            throw new NotImplementedException();
+        }
+
         public IList<Genre> GetGenres()
         {
             return new List<Genre>

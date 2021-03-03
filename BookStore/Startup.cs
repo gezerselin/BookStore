@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using BookStore.Services;
 using BookStore.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 namespace BookStore
 {
@@ -28,8 +29,18 @@ namespace BookStore
         {
             services.AddTransient<IBookService,BookService>();
             services.AddTransient<IGenreService,GenreService>();
+            services.AddTransient<IAuthorService, AuthorService>();
+            services.AddTransient<IPublisherService, PublisherService>();
+            services.AddTransient<IUserService,UserService>();
             services.AddControllersWithViews();
             services.AddDbContext<BookStoreDbContext>(option => option.UseSqlServer(Configuration.GetConnectionString("db")));
+            services.AddSession();
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(option =>
+                {
+                    option.LoginPath = "/Account/Login";
+                });
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -50,6 +61,9 @@ namespace BookStore
 
             app.UseRouting();
 
+            app.UseSession();
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

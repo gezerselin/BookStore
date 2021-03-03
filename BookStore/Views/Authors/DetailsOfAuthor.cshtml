@@ -1,0 +1,36 @@
+﻿@model BookStore.Models.Author
+@{
+    Layout = "_Layout1";
+    int count = 0;
+}
+
+<div class="row">
+
+    <div class="col-4">
+        <img src="@Model.ImageUrl" />
+    </div>
+    <div class="col-8">
+        <h2>@Model.Name @Model.LastName</h2>
+        @Model.Info
+    </div>
+</div>
+<div class="row">
+    <h2>@Model.Name @Model.LastName Kitapları</h2>
+</div>
+<div class="row">
+    
+    @foreach (var item in Model.Books)
+     {
+            @if (count != 0 && count % 4 == 0)
+            {
+                @:</div>
+                @:<div class="row">
+            }
+            <div class="col-3">
+
+                 <partial name="_BookCard" model="@item" />
+
+            </div>count++;
+             
+      }
+</div>

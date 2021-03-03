@@ -1,0 +1,84 @@
+﻿@model IEnumerable<BookStore.Models.Publisher>
+
+@{
+    Layout = "_Layout1";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        <a asp-action="Create">Yeni Yayınevi Ekle</a>
+    </p>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td>
+                        <a asp-action="Edit" asp-route-id="@item.Id">Düzenle</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id" class="delete" data-id="@item.Id">Sil</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</body>
+</html>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('.delete').on('click', function (event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/Publishers/Delete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        alertify.confirm(data + ' yayınevini silmek istediğinize emin misiniz?', function () {
+                            deletePublisher(id);
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            });
+            function deletePublisher(id) {
+                $.ajax({
+                    url: '/Publishers/Delete/' + id,
+                    type: 'POST',
+
+                    success: function (data) {
+                        if (data === 'OK') {
+                            location = location;
+                            alertify.success('yayınevi silindi :)')
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            }
+        })
+    </script>
+}

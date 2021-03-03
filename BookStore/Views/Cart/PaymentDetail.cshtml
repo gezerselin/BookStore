@@ -1,0 +1,175 @@
+﻿@model User
+@{
+    Layout = "_Layout";
+    double fee = 4.99;
+    int count = 0;
+    int count2 = 0;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>PaymentDetail</title>
+
+</head>
+<body>
+    <div class="row">
+        <div class="col-3"></div>
+        <div class="col-3">
+            <img src="~/storytelling.png" />
+
+        </div>
+        <div class="col-3"></div>
+        <div class="col-3">
+
+            <h5>Sepet Özeti</h5>
+            <p>Ürün Toplamı            @(Math.Round(ViewBag.total, 2) )</p>
+            <p>Kargo Ücreti            @fee</p>
+            <hr />
+            <p>Toplam                  @(Math.Round(ViewBag.total, 2)+ Math.Round(((decimal)fee),2 ))</p>
+
+            <a href="" class="btn btn-outline-success">Alışverişi Tamamla</a>
+        </div>
+
+    </div>
+    <div class="row">
+        <h5 style="padding:20px"> Adreslerim<a asp-action="Create" asp-controller="Addresses" style="color:cornflowerblue ; padding:8px">(Yeni Adres Ekle)</a></h5>
+        <p></p>
+    </div>
+    <div class="row">
+
+
+        @foreach (var item in Model.Addresses)
+        {
+            @if (count != 0 && count % 3 == 0)
+            {
+            @:</div>
+            @:<div class="row">
+            }
+            <div class="col-4">
+                <div class="card" style=" padding-bottom:10px ;padding-top:10px">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.AddressTitle</h5>
+                        <hr />
+                        <h6 class="card-subtitle mb-2 text-muted">@item.AddressDetails</h6>
+
+                        <a asp-action="Details" asp-controller="Addresses" asp-route-id="@item.Id" class="card-link">Adres Detayları</a> /
+                        <a asp-action="Delete" asp-controller="Addresses" class="delete" data-id="@item.Id">Adresi Sil</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+
+    </div>
+    <div class="row">
+       <h5 style="padding:20px"> Kredi Kartlarım <a asp-action="Create" asp-controller="CreditCarts" style="color:cornflowerblue;  padding:20px">(Yeni Kredi Kartı Ekle)</a> </h5>
+       <p></p>
+    </div>
+    <div class="row">
+        
+        @foreach (var item in Model.CreditCarts)
+        {
+            @if (count2 != 0 && count2 % 3 == 0)
+            {
+            @:</div>
+            @:<div class="row">
+            }
+            <div class="col-4">
+                <div class="card" style=" padding-bottom:10px ;padding-top:10px">
+                    <div class="card-body">
+                        <h5 class="card-title">@item.CartName</h5>
+                        <hr />
+                        <h6 class="card-subtitle mb-2 text-muted">@item.FullName</h6>
+                        <h6 class="card-subtitle mb-2 text-muted">@item.CartNo</h6>
+
+                        <a asp-action="Details" asp-controller="CreditCarts" asp-route-id="@item.Id" class="card-link">Kart Detayları</a> /
+                        <a asp-action="Delete" asp-controller="CreditCarts" class="deleteCart" data-id="@item.Id">Kartı Sil</a>
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+
+
+</body>
+</html>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $('.delete').on('click', function (event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/Addresses/Delete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        alertify.confirm(data +' adresinizi silmek istediğinize emin misiniz?', function () {
+                            deleteAddress(id);
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            });
+            function deleteAddress(id) {
+                $.ajax({
+                    url: '/Addresses/Delete/' + id,
+                    type: 'POST',
+
+                    success: function (data) {
+                        if (data === 'OK') {
+                            location = location;
+                            alertify.success('Adres silindi :)')
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            }
+            $('.deleteCart').on('click', function (event) {
+                event.preventDefault();
+                var id = $(this).data('id');
+                $.ajax({
+                    url: '/CreditCarts/Delete/' + id,
+                    type: 'GET',
+                    success: function (data) {
+                        alertify.confirm(data + ' isimli kitabı silmek istediğinize emin misiniz?', function () {
+                            deleteCreditCart(id);
+                        });
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            });
+            function deleteCreditCart(id) {
+                $.ajax({
+                    url: '/CreditCarts/Delete/' + id,
+                    type: 'POST',
+
+                    success: function (data) {
+                        if (data === 'OK') {
+                            location = location;
+                            alertify.success('Kart silindi :)')
+                        }
+
+                    },
+                    error: function (err) {
+                        console.log(err.statusText);
+                    }
+                })
+            }
+        })
+    </script>
+}
+
+

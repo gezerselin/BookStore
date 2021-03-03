@@ -17,15 +17,47 @@ namespace BookStore.Services
             this.dbContext = dbContext;
         }
 
+        public void AddBook(Book book)
+        {
+            dbContext.Books.Add(book);
+            dbContext.SaveChanges();
+        }
+
+        public void addComment(Comment comment)
+        {
+            dbContext.Comments.Add(comment);
+            dbContext.SaveChanges();
+
+        }
+
+        public void DeleteBook(Book deletingBook)
+        {
+            dbContext.Books.Remove(deletingBook);
+            dbContext.SaveChanges();
+
+        }
+
+        public int EditBook(Book book)
+        {
+            dbContext.Entry(book).State = EntityState.Modified;
+            return dbContext.SaveChanges();
+     }
+
         public List<Book> GetBookByGenreId(int genreId)
         {
-            return  dbContext.Books.AsNoTracking().Include(b => b.Genres)
-                .ThenInclude(bg => bg.Genre).Where(b => b.Genres.Any(bg => bg.GenreId == genreId)).ToList(); 
+            return dbContext.Books.AsNoTracking().Include(x => x.Author).Include(x => x.Publisher).Include(x => x.Genre).Where(b => b.GenreId == genreId).ToList();
+
+        }
+
+        public Book GetBookById(int id)
+        {
+            return dbContext.Books.Find(id);
+
         }
 
         public List<Book> GetBooks()
         {
-            var books = dbContext.Books.AsNoTracking().ToList();
+            var books = dbContext.Books.AsNoTracking().Include(x=>x.Author).Include(x=>x.Publisher).Include(x=>x.Genre).ToList();
             return books;
             
         }
